@@ -1,0 +1,495 @@
+basePath: /
+definitions:
+  hospital-middleware-system_src_helper.PaginatedResponse:
+    properties:
+      items: {}
+      page:
+        type: integer
+      per_page:
+        type: integer
+      total:
+        type: integer
+      total_pages:
+        type: integer
+    type: object
+  hospital-middleware-system_src_helper.Response:
+    properties:
+      data: {}
+      error: {}
+      message:
+        type: string
+      success:
+        type: boolean
+    type: object
+  hospital-middleware-system_src_modules_hospitals_serializer.ListHospitalItem:
+    properties:
+      address:
+        example: 123 Medical Lane, Springfield, IL 62704
+        type: string
+      created_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+      id:
+        example: 42
+        format: int64
+        type: integer
+      name:
+        example: St. Mary's General Hospital
+        type: string
+      phone:
+        example: "+12175550123"
+        type: string
+      status:
+        example: active
+        type: string
+      updated_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+    type: object
+  hospital-middleware-system_src_modules_patients_serializer.GetPatientResponse:
+    properties:
+      created_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+      date_of_birth:
+        example: "1985-03-15"
+        format: date
+        type: string
+      email:
+        example: john@example.com
+        type: string
+      gender:
+        example: male
+        type: string
+      hospital_id:
+        example: 1
+        format: int64
+        type: integer
+      id:
+        example: 101
+        format: int64
+        type: integer
+      name:
+        example: John Michael Doe
+        type: string
+      phone:
+        example: "+12175559988"
+        type: string
+      status:
+        example: active
+        type: string
+      updated_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+    type: object
+  hospital-middleware-system_src_modules_patients_serializer.ListPatientItem:
+    properties:
+      created_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+      date_of_birth:
+        example: "1985-03-15"
+        format: date
+        type: string
+      email:
+        example: john@example.com
+        type: string
+      gender:
+        example: male
+        type: string
+      hospital_id:
+        example: 1
+        format: int64
+        type: integer
+      id:
+        example: 101
+        format: int64
+        type: integer
+      name:
+        example: John Michael Doe
+        type: string
+      phone:
+        example: "+12175559988"
+        type: string
+      status:
+        example: active
+        type: string
+      updated_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+    type: object
+  hospital-middleware-system_src_modules_staffs_dto.CreateStaffRequest:
+    properties:
+      hospital_id:
+        example: 1
+        minimum: 1
+        type: integer
+      password:
+        example: SecurePass123!
+        format: password
+        maxLength: 100
+        minLength: 6
+        type: string
+      username:
+        example: alice.carter
+        maxLength: 255
+        minLength: 3
+        type: string
+    required:
+    - hospital_id
+    - password
+    - username
+    type: object
+  hospital-middleware-system_src_modules_staffs_dto.LoginRequest:
+    properties:
+      password:
+        example: password
+        format: password
+        minLength: 1
+        type: string
+      username:
+        example: admin
+        type: string
+    required:
+    - password
+    - username
+    type: object
+  hospital-middleware-system_src_modules_staffs_serializer.CreateStaffResponse:
+    properties:
+      created_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+      hospital_id:
+        example: 1
+        format: int64
+        type: integer
+      id:
+        example: 7
+        format: int64
+        type: integer
+      name:
+        example: Dr. Alice Carter
+        type: string
+      status:
+        example: active
+        type: string
+      updated_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+      username:
+        example: alice.carter
+        type: string
+    type: object
+  hospital-middleware-system_src_modules_staffs_serializer.LoginResponse:
+    properties:
+      expires_at:
+        example: 1694502400
+        type: integer
+      staff:
+        $ref: '#/definitions/hospital-middleware-system_src_modules_staffs_serializer.StaffMeResponse'
+      token:
+        example: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0...
+        format: jwt
+        type: string
+    type: object
+  hospital-middleware-system_src_modules_staffs_serializer.StaffMeResponse:
+    properties:
+      created_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+      hospital_id:
+        example: 1
+        format: int64
+        type: integer
+      id:
+        example: 1
+        format: int64
+        type: integer
+      name:
+        example: System Admin
+        type: string
+      status:
+        example: active
+        type: string
+      updated_at:
+        example: "2026-08-14T10:30:00Z"
+        format: date-time
+        type: string
+      username:
+        example: admin
+        type: string
+    type: object
+  src_router.HealthResponse:
+    properties:
+      service:
+        example: hospital-middleware-system
+        type: string
+      status:
+        example: ok
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  description: REST API middleware for multi-hospital deployments managing hospitals,
+    staff, and patients.
+  title: Hospital Middleware System API
+  version: "1.0"
+paths:
+  /health:
+    get:
+      description: 'Returns service name and 200 OK when the process is alive. Note:
+        it does not verify DB connectivity.'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/hospital-middleware-system_src_helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/src_router.HealthResponse'
+              type: object
+      summary: Liveness / readiness health check
+      tags:
+      - System
+  /hospitals:
+    get:
+      description: Return a paginated list of all hospitals sorted by most recent
+        first.
+      parameters:
+      - default: 1
+        description: Page number (1-indexed)
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 10
+        description: Items returned per page (1..100)
+        in: query
+        maximum: 100
+        minimum: 1
+        name: per_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/hospital-middleware-system_src_helper.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/hospital-middleware-system_src_helper.PaginatedResponse'
+                  - properties:
+                      items:
+                        items:
+                          $ref: '#/definitions/hospital-middleware-system_src_modules_hospitals_serializer.ListHospitalItem'
+                        type: array
+                    type: object
+              type: object
+      summary: List hospitals
+      tags:
+      - Hospitals
+  /patients:
+    get:
+      description: Return a paginated list of patients scoped to the caller's hospital
+        (from JWT claims). Supports optional filtering by identifiers, name components,
+        date of birth, email, and phone number.
+      parameters:
+      - description: Exact match on national ID / citizen ID number
+        in: query
+        name: national_id
+        type: string
+      - description: Exact match on passport number
+        in: query
+        name: passport_id
+        type: string
+      - description: Case-insensitive partial match on first name (English or Thai)
+        in: query
+        name: first_name
+        type: string
+      - description: Case-insensitive partial match on middle name (English or Thai)
+        in: query
+        name: middle_name
+        type: string
+      - description: Case-insensitive partial match on last name (English or Thai)
+        in: query
+        name: last_name
+        type: string
+      - description: Exact match on date of birth in YYYY-MM-DD format
+        in: query
+        name: date_of_birth
+        type: string
+      - description: Case-insensitive partial match on email address
+        in: query
+        name: email
+        type: string
+      - description: Case-insensitive partial match on phone number
+        in: query
+        name: phone_number
+        type: string
+      - default: 1
+        description: Page number (1-indexed)
+        in: query
+        minimum: 1
+        name: page
+        type: integer
+      - default: 10
+        description: Items per page (1..100)
+        in: query
+        maximum: 100
+        minimum: 1
+        name: per_page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/hospital-middleware-system_src_helper.Response'
+            - properties:
+                data:
+                  allOf:
+                  - $ref: '#/definitions/hospital-middleware-system_src_helper.PaginatedResponse'
+                  - properties:
+                      items:
+                        items:
+                          $ref: '#/definitions/hospital-middleware-system_src_modules_patients_serializer.ListPatientItem'
+                        type: array
+                    type: object
+              type: object
+      security:
+      - BearerAuth: []
+      summary: List patients
+      tags:
+      - Patients
+  /patients/{id}:
+    get:
+      description: 'Retrieve a single patient using any identifier: integer patient
+        ID, national ID, or passport number. Results are automatically scoped to the
+        caller''s hospital from JWT claims.'
+      parameters:
+      - description: 'Patient identifier: numeric ID, national_id, or passport_id'
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/hospital-middleware-system_src_helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/hospital-middleware-system_src_modules_patients_serializer.GetPatientResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Get a patient by identifier
+      tags:
+      - Patients
+  /staffs:
+    post:
+      consumes:
+      - application/json
+      description: Create a staff user bound to a hospital.
+      parameters:
+      - description: Staff details
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/hospital-middleware-system_src_modules_staffs_dto.CreateStaffRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/hospital-middleware-system_src_helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/hospital-middleware-system_src_modules_staffs_serializer.CreateStaffResponse'
+              type: object
+      summary: Create a new staff account
+      tags:
+      - Staff
+  /staffs/login:
+    post:
+      consumes:
+      - application/json
+      description: Verify staff email + password (bcrypt compare) and return a short-lived
+        Bearer JWT plus staff profile.
+      parameters:
+      - description: Staff credentials
+        in: body
+        name: body
+        required: true
+        schema:
+          $ref: '#/definitions/hospital-middleware-system_src_modules_staffs_dto.LoginRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/hospital-middleware-system_src_helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/hospital-middleware-system_src_modules_staffs_serializer.LoginResponse'
+              type: object
+      summary: Authenticate staff and issue JWT
+      tags:
+      - Auth
+  /staffs/me:
+    get:
+      description: Return the staff profile of the caller, resolved from the staff_id
+        JWT claim.
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/hospital-middleware-system_src_helper.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/hospital-middleware-system_src_modules_staffs_serializer.StaffMeResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Get the current authenticated staff profile
+      tags:
+      - Staff
+schemes:
+- http
+- https
+securityDefinitions:
+  BearerAuth:
+    description: 'JWT Bearer token. Format: "Bearer <token>"'
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"

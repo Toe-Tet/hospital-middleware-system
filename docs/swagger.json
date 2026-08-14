@@ -1,0 +1,737 @@
+{
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "swagger": "2.0",
+    "info": {
+        "description": "REST API middleware for multi-hospital deployments managing hospitals, staff, and patients.",
+        "title": "Hospital Middleware System API",
+        "contact": {},
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/health": {
+            "get": {
+                "description": "Returns service name and 200 OK when the process is alive. Note: it does not verify DB connectivity.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "System"
+                ],
+                "summary": "Liveness / readiness health check",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/hospital-middleware-system_src_helper.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/src_router.HealthResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/hospitals": {
+            "get": {
+                "description": "Return a paginated list of all hospitals sorted by most recent first.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Hospitals"
+                ],
+                "summary": "List hospitals",
+                "parameters": [
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number (1-indexed)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Items returned per page (1..100)",
+                        "name": "per_page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/hospital-middleware-system_src_helper.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/hospital-middleware-system_src_helper.PaginatedResponse"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/hospital-middleware-system_src_modules_hospitals_serializer.ListHospitalItem"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/patients": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Return a paginated list of patients scoped to the caller's hospital (from JWT claims). Supports optional filtering by identifiers, name components, date of birth, email, and phone number.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "List patients",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Exact match on national ID / citizen ID number",
+                        "name": "national_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Exact match on passport number",
+                        "name": "passport_id",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Case-insensitive partial match on first name (English or Thai)",
+                        "name": "first_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Case-insensitive partial match on middle name (English or Thai)",
+                        "name": "middle_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Case-insensitive partial match on last name (English or Thai)",
+                        "name": "last_name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Exact match on date of birth in YYYY-MM-DD format",
+                        "name": "date_of_birth",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Case-insensitive partial match on email address",
+                        "name": "email",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "Case-insensitive partial match on phone number",
+                        "name": "phone_number",
+                        "in": "query"
+                    },
+                    {
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number (1-indexed)",
+                        "name": "page",
+                        "in": "query"
+                    },
+                    {
+                        "maximum": 100,
+                        "minimum": 1,
+                        "type": "integer",
+                        "default": 10,
+                        "description": "Items per page (1..100)",
+                        "name": "per_page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/hospital-middleware-system_src_helper.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "allOf": [
+                                                {
+                                                    "$ref": "#/definitions/hospital-middleware-system_src_helper.PaginatedResponse"
+                                                },
+                                                {
+                                                    "type": "object",
+                                                    "properties": {
+                                                        "items": {
+                                                            "type": "array",
+                                                            "items": {
+                                                                "$ref": "#/definitions/hospital-middleware-system_src_modules_patients_serializer.ListPatientItem"
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            ]
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/patients/{id}": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Retrieve a single patient using any identifier: integer patient ID, national ID, or passport number. Results are automatically scoped to the caller's hospital from JWT claims.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Patients"
+                ],
+                "summary": "Get a patient by identifier",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Patient identifier: numeric ID, national_id, or passport_id",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/hospital-middleware-system_src_helper.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/hospital-middleware-system_src_modules_patients_serializer.GetPatientResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/staffs": {
+            "post": {
+                "description": "Create a staff user bound to a hospital.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "Create a new staff account",
+                "parameters": [
+                    {
+                        "description": "Staff details",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/hospital-middleware-system_src_modules_staffs_dto.CreateStaffRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/hospital-middleware-system_src_helper.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/hospital-middleware-system_src_modules_staffs_serializer.CreateStaffResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/staffs/login": {
+            "post": {
+                "description": "Verify staff email + password (bcrypt compare) and return a short-lived Bearer JWT plus staff profile.",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Authenticate staff and issue JWT",
+                "parameters": [
+                    {
+                        "description": "Staff credentials",
+                        "name": "body",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/hospital-middleware-system_src_modules_staffs_dto.LoginRequest"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/hospital-middleware-system_src_helper.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/hospital-middleware-system_src_modules_staffs_serializer.LoginResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        },
+        "/staffs/me": {
+            "get": {
+                "security": [
+                    {
+                        "BearerAuth": []
+                    }
+                ],
+                "description": "Return the staff profile of the caller, resolved from the staff_id JWT claim.",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Staff"
+                ],
+                "summary": "Get the current authenticated staff profile",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "allOf": [
+                                {
+                                    "$ref": "#/definitions/hospital-middleware-system_src_helper.Response"
+                                },
+                                {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "$ref": "#/definitions/hospital-middleware-system_src_modules_staffs_serializer.StaffMeResponse"
+                                        }
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "hospital-middleware-system_src_helper.PaginatedResponse": {
+            "type": "object",
+            "properties": {
+                "items": {},
+                "page": {
+                    "type": "integer"
+                },
+                "per_page": {
+                    "type": "integer"
+                },
+                "total": {
+                    "type": "integer"
+                },
+                "total_pages": {
+                    "type": "integer"
+                }
+            }
+        },
+        "hospital-middleware-system_src_helper.Response": {
+            "type": "object",
+            "properties": {
+                "data": {},
+                "error": {},
+                "message": {
+                    "type": "string"
+                },
+                "success": {
+                    "type": "boolean"
+                }
+            }
+        },
+        "hospital-middleware-system_src_modules_hospitals_serializer.ListHospitalItem": {
+            "type": "object",
+            "properties": {
+                "address": {
+                    "type": "string",
+                    "example": "123 Medical Lane, Springfield, IL 62704"
+                },
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 42
+                },
+                "name": {
+                    "type": "string",
+                    "example": "St. Mary's General Hospital"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+12175550123"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "active"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                }
+            }
+        },
+        "hospital-middleware-system_src_modules_patients_serializer.GetPatientResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                },
+                "date_of_birth": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "1985-03-15"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "male"
+                },
+                "hospital_id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 101
+                },
+                "name": {
+                    "type": "string",
+                    "example": "John Michael Doe"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+12175559988"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "active"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                }
+            }
+        },
+        "hospital-middleware-system_src_modules_patients_serializer.ListPatientItem": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                },
+                "date_of_birth": {
+                    "type": "string",
+                    "format": "date",
+                    "example": "1985-03-15"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "john@example.com"
+                },
+                "gender": {
+                    "type": "string",
+                    "example": "male"
+                },
+                "hospital_id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 101
+                },
+                "name": {
+                    "type": "string",
+                    "example": "John Michael Doe"
+                },
+                "phone": {
+                    "type": "string",
+                    "example": "+12175559988"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "active"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                }
+            }
+        },
+        "hospital-middleware-system_src_modules_staffs_dto.CreateStaffRequest": {
+            "type": "object",
+            "required": [
+                "hospital_id",
+                "password",
+                "username"
+            ],
+            "properties": {
+                "hospital_id": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "example": 1
+                },
+                "password": {
+                    "type": "string",
+                    "format": "password",
+                    "maxLength": 100,
+                    "minLength": 6,
+                    "example": "SecurePass123!"
+                },
+                "username": {
+                    "type": "string",
+                    "maxLength": 255,
+                    "minLength": 3,
+                    "example": "alice.carter"
+                }
+            }
+        },
+        "hospital-middleware-system_src_modules_staffs_dto.LoginRequest": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "password": {
+                    "type": "string",
+                    "format": "password",
+                    "minLength": 1,
+                    "example": "password"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "hospital-middleware-system_src_modules_staffs_serializer.CreateStaffResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                },
+                "hospital_id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 7
+                },
+                "name": {
+                    "type": "string",
+                    "example": "Dr. Alice Carter"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "active"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "alice.carter"
+                }
+            }
+        },
+        "hospital-middleware-system_src_modules_staffs_serializer.LoginResponse": {
+            "type": "object",
+            "properties": {
+                "expires_at": {
+                    "type": "integer",
+                    "example": 1694502400
+                },
+                "staff": {
+                    "$ref": "#/definitions/hospital-middleware-system_src_modules_staffs_serializer.StaffMeResponse"
+                },
+                "token": {
+                    "type": "string",
+                    "format": "jwt",
+                    "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIn0..."
+                }
+            }
+        },
+        "hospital-middleware-system_src_modules_staffs_serializer.StaffMeResponse": {
+            "type": "object",
+            "properties": {
+                "created_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                },
+                "hospital_id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "id": {
+                    "type": "integer",
+                    "format": "int64",
+                    "example": 1
+                },
+                "name": {
+                    "type": "string",
+                    "example": "System Admin"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "active"
+                },
+                "updated_at": {
+                    "type": "string",
+                    "format": "date-time",
+                    "example": "2026-08-14T10:30:00Z"
+                },
+                "username": {
+                    "type": "string",
+                    "example": "admin"
+                }
+            }
+        },
+        "src_router.HealthResponse": {
+            "type": "object",
+            "properties": {
+                "service": {
+                    "type": "string",
+                    "example": "hospital-middleware-system"
+                },
+                "status": {
+                    "type": "string",
+                    "example": "ok"
+                }
+            }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "description": "JWT Bearer token. Format: \"Bearer \u003ctoken\u003e\"",
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}
