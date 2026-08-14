@@ -112,6 +112,54 @@ make run
 
 The service starts on `http://localhost:8080` by default.
 
+## Run With Docker
+
+The repository now includes:
+
+- `Dockerfile` for the Go API
+- `docker-compose.yml` for `postgres`, `app`, `nginx`, and an optional `seed` service
+- `docker/nginx.conf` as the reverse proxy config
+
+Start the stack:
+
+```bash
+docker compose up --build
+```
+
+Run in detached mode:
+
+```bash
+docker compose up --build -d
+```
+
+Open the API through Nginx:
+
+- [http://localhost:8080/health](http://localhost:8080/health)
+- [http://localhost:8080/api/docs/index.html](http://localhost:8080/api/docs/index.html)
+
+Useful Docker commands:
+
+```bash
+docker compose logs -f app
+docker compose logs -f nginx
+docker compose down
+docker compose down -v
+```
+
+Seed sample data in Docker:
+
+```bash
+docker compose --profile tools run --rm seed
+```
+
+Notes:
+
+- The app container waits for PostgreSQL before starting.
+- Migrations run automatically on app startup by default.
+- Nginx listens on host port `8080` and proxies requests to the Go app.
+- PostgreSQL is exposed on host port `5432` by default.
+- Override secrets and ports with environment variables such as `JWT_SECRET`, `NGINX_PORT`, and `POSTGRES_PORT`.
+
 ## Common Commands
 
 | Command                 | Purpose                                     |
@@ -223,4 +271,3 @@ go test ./...
 - `patients` endpoints are JWT-protected.
 - `staffs/me` is JWT-protected.
 - `hospitals` list is currently exposed without JWT middleware.
-- Internal project notes indicate some module specs are ahead of implementation, especially around RBAC and tenancy checks.
