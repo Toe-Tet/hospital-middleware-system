@@ -136,7 +136,7 @@ func TestController_Create(t *testing.T) {
 			wantStaff:   staff,
 		},
 		{
-			name: "payload missing required fields returns internal error",
+			name: "payload missing required fields returns validation error",
 			body: struct{ Junk string }{Junk: "junk"},
 			setupMock: func(m *mockService) {
 				m.createFn = func(ctx context.Context, req *dto.CreateStaffRequest) (*model.Staff, error) {
@@ -144,12 +144,12 @@ func TestController_Create(t *testing.T) {
 					return nil, nil
 				}
 			},
-			wantStatus:    http.StatusInternalServerError,
+			wantStatus:    http.StatusBadRequest,
 			wantSuccess:   false,
-			wantErrorCode: apperrors.CodeInternalServerError,
+			wantErrorCode: apperrors.CodeValidationError,
 		},
 		{
-			name: "missing required password returns internal error",
+			name: "missing required password returns validation error",
 			body: dto.CreateStaffRequest{
 				HospitalID: 1,
 				Username:   "alice.carter",
@@ -160,12 +160,12 @@ func TestController_Create(t *testing.T) {
 					return nil, nil
 				}
 			},
-			wantStatus:    http.StatusInternalServerError,
+			wantStatus:    http.StatusBadRequest,
 			wantSuccess:   false,
-			wantErrorCode: apperrors.CodeInternalServerError,
+			wantErrorCode: apperrors.CodeValidationError,
 		},
 		{
-			name: "username too short returns internal error",
+			name: "username too short returns validation error",
 			body: dto.CreateStaffRequest{
 				HospitalID: 1,
 				Username:   "ab",
@@ -177,9 +177,9 @@ func TestController_Create(t *testing.T) {
 					return nil, nil
 				}
 			},
-			wantStatus:    http.StatusInternalServerError,
+			wantStatus:    http.StatusBadRequest,
 			wantSuccess:   false,
-			wantErrorCode: apperrors.CodeInternalServerError,
+			wantErrorCode: apperrors.CodeValidationError,
 		},
 		{
 			name: "duplicate username → 409 CONFLICT",
@@ -292,7 +292,7 @@ func TestController_Login(t *testing.T) {
 			checkToken:  true,
 		},
 		{
-			name: "missing password returns internal error",
+			name: "missing password returns validation error",
 			body: dto.LoginRequest{Username: "alice.carter"},
 			setupMock: func(m *mockService) {
 				m.loginFn = func(ctx context.Context, req *dto.LoginRequest) (*serializer.LoginResponse, error) {
@@ -300,12 +300,12 @@ func TestController_Login(t *testing.T) {
 					return nil, nil
 				}
 			},
-			wantStatus:    http.StatusInternalServerError,
+			wantStatus:    http.StatusBadRequest,
 			wantSuccess:   false,
-			wantErrorCode: apperrors.CodeInternalServerError,
+			wantErrorCode: apperrors.CodeValidationError,
 		},
 		{
-			name: "empty JSON object returns internal error",
+			name: "empty JSON object returns validation error",
 			body: struct{}{},
 			setupMock: func(m *mockService) {
 				m.loginFn = func(ctx context.Context, req *dto.LoginRequest) (*serializer.LoginResponse, error) {
@@ -313,9 +313,9 @@ func TestController_Login(t *testing.T) {
 					return nil, nil
 				}
 			},
-			wantStatus:    http.StatusInternalServerError,
+			wantStatus:    http.StatusBadRequest,
 			wantSuccess:   false,
-			wantErrorCode: apperrors.CodeInternalServerError,
+			wantErrorCode: apperrors.CodeValidationError,
 		},
 		{
 			name: "wrong credentials → 401 Unauthorized",

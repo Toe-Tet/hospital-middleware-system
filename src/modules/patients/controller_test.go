@@ -346,10 +346,10 @@ func TestController_List(t *testing.T) {
 			},
 			wantStatus:    http.StatusBadRequest,
 			wantSuccess:   false,
-			wantErrorCode: apperrors.CodeBadRequest,
+			wantErrorCode: apperrors.CodeValidationError,
 		},
 		{
-			name:       "per_page 501 triggers lte=100 validation error BAD_REQUEST",
+			name:       "per_page 501 triggers validation error",
 			hospitalID: testHospitalID,
 			query:      "?per_page=501",
 			setupMock: func(m *mockService) {
@@ -360,7 +360,7 @@ func TestController_List(t *testing.T) {
 			},
 			wantStatus:    http.StatusBadRequest,
 			wantSuccess:   false,
-			wantErrorCode: apperrors.CodeBadRequest,
+			wantErrorCode: apperrors.CodeValidationError,
 		},
 		{
 			name:       "invalid date_of_birth bubbles service 400",
