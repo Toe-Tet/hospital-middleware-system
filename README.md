@@ -110,7 +110,26 @@ make seed
 make run
 ```
 
-The service starts on `http://localhost:8080` by default.
+The service starts on `http://localhost:8080` by default. You must run the API before Swagger UI and Swagger endpoints are accessible.
+
+6. Verify the API is up:
+
+```bash
+curl http://localhost:8080/health
+```
+
+7. Open Swagger UI in your browser:
+
+- [http://localhost:8080/api/docs/index.html](http://localhost:8080/api/docs/index.html)
+
+If you only want to view and test the existing API endpoints, `make run` is enough.
+
+If you updated Swagger annotations in Go code and want to regenerate the docs first, run:
+
+```bash
+make swagger
+make run
+```
 
 ## Run With Docker
 
