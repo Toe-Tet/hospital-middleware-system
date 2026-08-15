@@ -52,10 +52,10 @@ DTO fields use `binding:"required,min=N,max=N,email"` tags (go-playground/valida
 **JWT** (`middleware.JWTAuth()`):
 
 - Requires `Authorization: Bearer <token>`
-- Validates token; injects into ctx: `staff_id`, `hospital_id`, `role`
+- Validates token; injects into ctx: `staff_id`, `hospital_id`
 - Access via: `middleware.GetStaffID(c)`, `middleware.GetHospitalID(c)`
 - Token signed with `JWT_SECRET`, expiry from `JWT_EXPIRES_HOURS` (default 24h)
-- Claims: `StaffID`, `HospitalID`, `Role`
+- Claims: `StaffID`, `HospitalID`
 
 **Passwords**: bcrypt (`bcrypt.DefaultCost`) — hash on Create, compare on Login. `Password` field has `json:"-"`.
 
@@ -63,8 +63,6 @@ DTO fields use `binding:"required,min=N,max=N,email"` tags (go-playground/valida
 
 - `protected := v1.Group(""); protected.Use(JWTAuth())` — default home for all modules
 - Public endpoints (login, health) outside this group
-
-**Role gating**: per-route `middleware.RequireRoles("admin", ...)` before controller handler.
 
 ## Routing
 

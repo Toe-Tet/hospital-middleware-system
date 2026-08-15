@@ -10,7 +10,6 @@ type ListStaffItem struct {
 	Username   string  `json:"username" example:"alice.carter"`
 	Name       *string  `json:"name" example:"Dr. Alice Carter"`
 	Email      string  `json:"email" example:"alice.carter@hospital.com" format:"email"`
-	Role       string  `json:"role" example:"doctor" enum:"staff,admin,doctor,nurse,receptionist"`
 	Status     string  `json:"status" example:"active" enum:"active,inactive"`
 	CreatedAt  string  `json:"created_at" example:"2026-08-14T10:30:00Z" format:"date-time"`
 	UpdatedAt  string  `json:"updated_at" example:"2026-08-14T10:30:00Z" format:"date-time"`

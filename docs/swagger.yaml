@@ -61,8 +61,14 @@ definitions:
       email:
         example: john@example.com
         type: string
+      first_name_en:
+        example: John
+        type: string
+      first_name_th:
+        example: สมชาย
+        type: string
       gender:
-        example: male
+        example: M
         type: string
       hospital_id:
         example: 1
@@ -72,11 +78,28 @@ definitions:
         example: 101
         format: int64
         type: integer
-      name:
-        example: John Michael Doe
+      last_name_en:
+        example: Doe
         type: string
-      phone:
-        example: "+12175559988"
+      last_name_th:
+        example: ไทย
+        type: string
+      middle_name_en:
+        example: Michael
+        type: string
+      middle_name_th:
+        type: string
+      national_id:
+        example: "1100100100123"
+        type: string
+      passport_id:
+        example: AB1234567
+        type: string
+      patient_hn:
+        example: HN-0001
+        type: string
+      phone_number:
+        example: "0812345678"
         type: string
       status:
         example: active
@@ -99,8 +122,14 @@ definitions:
       email:
         example: john@example.com
         type: string
+      first_name_en:
+        example: John
+        type: string
+      first_name_th:
+        example: สมชาย
+        type: string
       gender:
-        example: male
+        example: M
         type: string
       hospital_id:
         example: 1
@@ -110,11 +139,28 @@ definitions:
         example: 101
         format: int64
         type: integer
-      name:
-        example: John Michael Doe
+      last_name_en:
+        example: Doe
         type: string
-      phone:
-        example: "+12175559988"
+      last_name_th:
+        example: ไทย
+        type: string
+      middle_name_en:
+        example: Michael
+        type: string
+      middle_name_th:
+        type: string
+      national_id:
+        example: "1100100100123"
+        type: string
+      passport_id:
+        example: AB1234567
+        type: string
+      patient_hn:
+        example: HN-0001
+        type: string
+      phone_number:
+        example: "0812345678"
         type: string
       status:
         example: active

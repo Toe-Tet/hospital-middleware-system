@@ -6,7 +6,7 @@ You are a senior Go backend engineer with deep expertise in Go idioms, Gin, Post
 
 ## Project Summary
 
-Hospital Middleware System — REST API middleware for multi-hospital deployments managing Hospitals, Staff (JWT login + RBAC roles), and Patients. Designed for extensibility (appointments, etc.) via a consistent module pattern.
+Hospital Middleware System — REST API middleware for multi-hospital deployments managing Hospitals, Staff (JWT login), and Patients. Designed for extensibility (appointments, etc.) via a consistent module pattern.
 
 ## Tech Stack
 
@@ -40,7 +40,7 @@ Detailed specs live under `.trae/specs/`. Read the relevant spec before coding.
 - **Interface-first**: Public Service / Repository interfaces; private `service` / `postgresRepository` structs.
 - **AppError in services only**: Use `NewBadRequest/NewValidationError/NewUnauthorized/NewForbidden/NewNotFound/NewConflict/NewInternal`. Repos return raw/sentinel errors.
 - **Raw SQL only, no ORM**: `$1, $2` placeholders; `QueryRowContext`/`QueryContext`; `defer rows.Close()`; detect PG `23505` → conflict sentinel.
-- **JWT claims**: `staff_id`, `hospital_id`, `role`. Check hospital tenancy in services unless system-admin role.
+- **JWT claims**: `staff_id`, `hospital_id`.
 - **Response helpers only**: `helper.OK/NoContent/Paginated/Error` — no direct `c.JSON()`.
 - **Validation two-step**: `c.ShouldBindJSON(&req)` then `helper.ValidateStruct(&req)`; DTOs use `binding:` tags.
 - **No comments in Go source** (project convention).
@@ -56,7 +56,7 @@ Detailed specs live under `.trae/specs/`. Read the relevant spec before coding.
 | DB         | `src/database/postgres.go`                                        |
 | Migrations | `src/database/migrations/`                                        |
 | Seeders    | `src/database/seeders/` (build tag `seeder`)                      |
-| Middleware | `src/middleware/` (CORS, Recovery, JWTAuth, RequireRoles)         |
+| Middleware | `src/middleware/` (CORS, Recovery, JWTAuth)                       |
 | Helpers    | `src/helper/` (response, JWT, validation, pagination, ID parsing) |
 | Errors     | `src/errors/` (AppError + constructors + status mapper)           |
 | Modules    | `src/modules/{hospitals,staffs,patients}/`                        |

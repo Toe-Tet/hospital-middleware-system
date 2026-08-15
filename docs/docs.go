@@ -494,9 +494,17 @@ const docTemplate = `{
                     "type": "string",
                     "example": "john@example.com"
                 },
+                "first_name_en": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "first_name_th": {
+                    "type": "string",
+                    "example": "สมชาย"
+                },
                 "gender": {
                     "type": "string",
-                    "example": "male"
+                    "example": "M"
                 },
                 "hospital_id": {
                     "type": "integer",
@@ -508,13 +516,36 @@ const docTemplate = `{
                     "format": "int64",
                     "example": 101
                 },
-                "name": {
+                "last_name_en": {
                     "type": "string",
-                    "example": "John Michael Doe"
+                    "example": "Doe"
                 },
-                "phone": {
+                "last_name_th": {
                     "type": "string",
-                    "example": "+12175559988"
+                    "example": "ไทย"
+                },
+                "middle_name_en": {
+                    "type": "string",
+                    "example": "Michael"
+                },
+                "middle_name_th": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "string",
+                    "example": "1100100100123"
+                },
+                "passport_id": {
+                    "type": "string",
+                    "example": "AB1234567"
+                },
+                "patient_hn": {
+                    "type": "string",
+                    "example": "HN-0001"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "0812345678"
                 },
                 "status": {
                     "type": "string",
@@ -544,9 +575,17 @@ const docTemplate = `{
                     "type": "string",
                     "example": "john@example.com"
                 },
+                "first_name_en": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "first_name_th": {
+                    "type": "string",
+                    "example": "สมชาย"
+                },
                 "gender": {
                     "type": "string",
-                    "example": "male"
+                    "example": "M"
                 },
                 "hospital_id": {
                     "type": "integer",
@@ -558,13 +597,36 @@ const docTemplate = `{
                     "format": "int64",
                     "example": 101
                 },
-                "name": {
+                "last_name_en": {
                     "type": "string",
-                    "example": "John Michael Doe"
+                    "example": "Doe"
                 },
-                "phone": {
+                "last_name_th": {
                     "type": "string",
-                    "example": "+12175559988"
+                    "example": "ไทย"
+                },
+                "middle_name_en": {
+                    "type": "string",
+                    "example": "Michael"
+                },
+                "middle_name_th": {
+                    "type": "string"
+                },
+                "national_id": {
+                    "type": "string",
+                    "example": "1100100100123"
+                },
+                "passport_id": {
+                    "type": "string",
+                    "example": "AB1234567"
+                },
+                "patient_hn": {
+                    "type": "string",
+                    "example": "HN-0001"
+                },
+                "phone_number": {
+                    "type": "string",
+                    "example": "0812345678"
                 },
                 "status": {
                     "type": "string",

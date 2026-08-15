@@ -30,7 +30,7 @@ func NewController(db *sql.DB) *Controller {
 //	@Description	Retrieve a single patient using any identifier: integer patient ID, national ID, or passport number. Results are automatically scoped to the caller's hospital from JWT claims.
 //	@Tags			Patients
 //	@Produce		json
-//	@Param			id	path		string	true	"Patient identifier: numeric ID, national_id, or passport_id" example:"101"
+//	@Param			id	path		string	true	"Patient identifier: national_id, or passport_id" example:"1100100100123"
 //	@Success		200	{object}	helper.Response{data=serializer.GetPatientResponse}
 //	@Router			/patients/{id} [get]
 //	@Security		BearerAuth

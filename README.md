@@ -249,7 +249,7 @@ Other seeded usernames include:
 - Modules live under `src/modules/<feature>/`
 - Repositories use raw SQL with PostgreSQL
 - Responses use helper wrappers such as `helper.OK()` and `helper.Error()`
-- JWT claims include `staff_id`, `hospital_id`, and `role`
+- JWT claims include `staff_id`, and `hospital_id`
 
 ## Testing
 

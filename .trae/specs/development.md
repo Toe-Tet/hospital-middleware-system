@@ -2,20 +2,20 @@
 
 ## Makefile Targets
 
-| Category | Target               | Action                                                              |
-| -------- | -------------------- | ------------------------------------------------------------------- |
-| Build    | `make build`         | Compile → `./bin/hospital-middleware`                               |
-| Run      | `make run`           | `go run ./cmd/api/main.go`                                          |
-| Clean    | `make clean`         | Remove `./bin/`, `coverage.out`, `coverage.html`                    |
-| Test     | `make test`          | `go test -v ./...`                                                  |
-| Test     | `make test-coverage` | Coverage profile + HTML report                                       |
-| DB       | `make install-tools` | Install `golang-migrate` → `./bin/`                                 |
-| DB       | `make migrate-up`    | Apply pending migrations                                            |
-| DB       | `make migrate-down`  | Rollback last migration                                             |
-| DB       | `make migrate-down-all` | Rollback ALL (dev only — destructive)                           |
-| DB       | `make seed`          | Run Go seeders (tag: seeder)                                        |
-| Quality  | `make fmt`           | `gofmt -s` + `goimports` (best effort)                              |
-| Quality  | `make tidy`          | `go mod tidy`                                                       |
+| Category | Target                  | Action                                           |
+| -------- | ----------------------- | ------------------------------------------------ |
+| Build    | `make build`            | Compile → `./bin/hospital-middleware`            |
+| Run      | `make run`              | `go run ./cmd/api/main.go`                       |
+| Clean    | `make clean`            | Remove `./bin/`, `coverage.out`, `coverage.html` |
+| Test     | `make test`             | `go test -v ./...`                               |
+| Test     | `make test-coverage`    | Coverage profile + HTML report                   |
+| DB       | `make install-tools`    | Install `golang-migrate` → `./bin/`              |
+| DB       | `make migrate-up`       | Apply pending migrations                         |
+| DB       | `make migrate-down`     | Rollback last migration                          |
+| DB       | `make migrate-down-all` | Rollback ALL (dev only — destructive)            |
+| DB       | `make seed`             | Run Go seeders (tag: seeder)                     |
+| Quality  | `make fmt`              | `gofmt -s` + `goimports` (best effort)           |
+| Quality  | `make tidy`             | `go mod tidy`                                    |
 
 ## Code Style
 
@@ -31,21 +31,20 @@
 
 ## Naming Files
 
-| Kind                     | Pattern                             | Example                               |
-| ------------------------ | ----------------------------------- | ------------------------------------- |
-| DTO request              | `<action>_<entity>_request.go`      | `create_hospital_request.go`          |
-| Serializer response      | `<action>_<entity>_response.go`     | `get_hospital_response.go`            |
-| Migration                | `<NNNNNN>_<snake_name>.[up\|down].sql` | `000004_create_appointments.up.sql` |
-| Seeder                   | `<entity>_seeder.go`                | `hospital_seeder.go`                  |
+| Kind                | Pattern                                | Example                             |
+| ------------------- | -------------------------------------- | ----------------------------------- |
+| DTO request         | `<action>_<entity>_request.go`         | `create_hospital_request.go`        |
+| Serializer response | `<action>_<entity>_response.go`        | `get_hospital_response.go`          |
+| Migration           | `<NNNNNN>_<snake_name>.[up\|down].sql` | `000004_create_appointments.up.sql` |
+| Seeder              | `<entity>_seeder.go`                   | `hospital_seeder.go`                |
 
 ## Security Checklist
 
 - [ ] Parameterized SQL everywhere (no sprintf into query)
 - [ ] Protected endpoints inside `JWTAuth()` group; public endpoints (login, `/health`) outside
-- [ ] Write/admin routes wrapped with `RequireRoles("admin"[,...])`
 - [ ] Passwords bcrypt only; never plaintext logged or stored
 - [ ] DTOs carry validator tags; controllers run 2-step validation
-- [ ] Service layer enforces hospital tenancy (`hospital_id` from JWT claim matches queried resource) unless system-admin role
+- [ ] Service layer enforces hospital tenancy (`hospital_id` from JWT claim matches queried resource)
 - [ ] Login failure always 401 + generic "Invalid email or password" (never leak "email not found")
 
 ## Feature Addition Checklist
@@ -57,7 +56,7 @@
 5. Implement repository interface + `postgresRepository`; handle ErrNoRows→nil, 23505→sentinel
 6. Implement service interface + AppError mapping + business rules/tenancy
 7. Controller with bind→validate→service→response helpers (no direct `c.JSON`)
-8. Wire `route.go`; apply `RequireRoles` where needed
+8. Wire `route.go`
 9. Register module in `router.go` (protected/public group)
 10. Optional: add seeder + hook into `seeder.go` run list after dependencies
 11. `make fmt tidy` → `make build` → `make test`

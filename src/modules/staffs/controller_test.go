@@ -84,7 +84,6 @@ func fakeStaffJWT(staffID int) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Set(string(middleware.StaffIDKey), staffID)
 		c.Set(string(middleware.HospitalIDKey), 1)
-		c.Set(string(middleware.RoleKey), "admin")
 		c.Next()
 	}
 }

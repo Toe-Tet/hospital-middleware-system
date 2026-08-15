@@ -14,7 +14,6 @@ type contextKey string
 const (
 	StaffIDKey    contextKey = "staff_id"
 	HospitalIDKey contextKey = "hospital_id"
-	RoleKey       contextKey = "role"
 )
 
 func JWTAuth() gin.HandlerFunc {
@@ -44,7 +43,6 @@ func JWTAuth() gin.HandlerFunc {
 
 		c.Set(string(StaffIDKey), claims.StaffID)
 		c.Set(string(HospitalIDKey), claims.HospitalID)
-		c.Set(string(RoleKey), claims.Role)
 
 		c.Next()
 	}
