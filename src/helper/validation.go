@@ -1,6 +1,7 @@
 package helper
 
 import (
+	"fmt"
 	"strconv"
 
 	apperrors "hospital-middleware-system/src/errors"
@@ -18,13 +19,16 @@ type ValidationFieldError struct {
 
 func ValidateStruct(s interface{}) error {
 	err := validate.Struct(s)
+  fmt.Println( "err 1:", err)
 	if err == nil {
 		return nil
 	}
+  fmt.Println( "err:", err)
 
 	if _, ok := err.(*validator.InvalidValidationError); ok {
 		return apperrors.NewInternal(err)
 	}
+  fmt.Println( "err:", err.Error())
 
 	validationErrors := err.(validator.ValidationErrors)
 	var fieldErrors []ValidationFieldError
@@ -37,6 +41,32 @@ func ValidateStruct(s interface{}) error {
 	}
 
 	return apperrors.NewValidationError("", fieldErrors)
+}
+
+func ValidateError(err error) error {
+    if err == nil {
+        return nil
+    }
+
+    if _, ok := err.(*validator.InvalidValidationError); ok {
+        return apperrors.NewInternal(err)
+    }
+
+    validationErrors, ok := err.(validator.ValidationErrors)
+    if !ok {
+        return apperrors.NewBadRequest(err.Error())
+    }
+
+    fieldErrors := make([]ValidationFieldError, 0, len(validationErrors))
+
+    for _, fe := range validationErrors {
+        fieldErrors = append(fieldErrors, ValidationFieldError{
+            Field:   fe.Field(),
+            Message: buildFieldErrorMsg(fe),
+        })
+    }
+
+    return apperrors.NewValidationError("", fieldErrors)
 }
 
 func buildFieldErrorMsg(fe validator.FieldError) string {

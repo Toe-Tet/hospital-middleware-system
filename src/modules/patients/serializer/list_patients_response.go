@@ -10,14 +10,14 @@ type ListPatientItem struct {
 	ID           int        `json:"id" example:"101" format:"int64" required:"true"`
 	HospitalID   int        `json:"hospital_id" example:"1" format:"int64" required:"true"`
 	PatientHN    string     `json:"patient_hn" example:"HN-0001" required:"true"`
-	FirstNameTh  *string    `json:"first_name_th,omitempty" example:"สมชาย"`
-	MiddleNameTh *string    `json:"middle_name_th,omitempty"`
-	LastNameTh   *string    `json:"last_name_th,omitempty" example:"ไทย"`
+	FirstNameTh  *string    `json:"first_name_th" example:"สมชาย"`
+	MiddleNameTh *string    `json:"middle_name_th"`
+	LastNameTh   *string    `json:"last_name_th" example:"ไทย"`
 	FirstNameEn  string     `json:"first_name_en" example:"John" required:"true"`
-	MiddleNameEn *string    `json:"middle_name_en,omitempty" example:"Michael"`
+	MiddleNameEn *string    `json:"middle_name_en" example:"Michael"`
 	LastNameEn   string     `json:"last_name_en" example:"Doe" required:"true"`
-	NationalID   *string    `json:"national_id,omitempty" example:"1100100100123"`
-	PassportID   *string    `json:"passport_id,omitempty" example:"AB1234567"`
+	NationalID   *string    `json:"national_id" example:"1100100100123"`
+	PassportID   *string    `json:"passport_id" example:"AB1234567"`
 	DateOfBirth  string     `json:"date_of_birth" example:"1985-03-15" format:"date" required:"true"`
 	Gender       string     `json:"gender" example:"M" enum:"M,F" required:"true"`
 	Email        string     `json:"email" example:"john@example.com"`

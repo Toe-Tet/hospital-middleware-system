@@ -4,7 +4,6 @@ import (
 	"context"
 	"database/sql"
 	"errors"
-	"fmt"
 	"strings"
 
 	"hospital-middleware-system/src/modules/staffs/model"
@@ -25,21 +24,18 @@ func NewRepository(db *sql.DB) StaffRepository {
 }
 
 func (r *postgresRepository) Create(ctx context.Context, s *model.Staff) (*model.Staff, error) {
-  fmt.Println("s...", s)
 	query := `
 		INSERT INTO staffs (hospital_id, username, name, password, status, created_at, updated_at)
 		VALUES ($1, $2, $3, $4, 'active', NOW(), NULL)
 		RETURNING id, hospital_id, username, name, password, status, created_at, updated_at
 	`
-  fmt.Println("query...", query)
   
 	result := &model.Staff{}
-  fmt.Println("result...", result)
 
 	err := r.db.QueryRowContext(ctx, query, s.HospitalID, s.Username, s.Name, s.Password).Scan(
 		&result.ID, &result.HospitalID, &result.Username, &result.Name, &result.Password, &result.Status, &result.CreatedAt, &result.UpdatedAt,
 	)
-  fmt.Println("err...", err)
+
 	if err != nil {
 		if isUniqueViolation(err) {
 			if strings.Contains(err.Error(), "idx_staffs_email_unique") || strings.Contains(strings.ToLower(err.Error()), "email") {

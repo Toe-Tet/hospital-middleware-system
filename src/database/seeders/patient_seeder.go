@@ -20,14 +20,14 @@ func NewPatientSeeder(db *sql.DB) *PatientSeeder {
 func (s *PatientSeeder) Run(ctx context.Context) error {
 	patients := []struct {
 		HospitalID   int
-		FirstNameTH  string
-		MiddleNameTH string
-		LastNameTH   string
+		FirstNameTH  *string
+		MiddleNameTH *string
+		LastNameTH   *string
 		FirstNameEN  string
-		MiddleNameEN string
+		MiddleNameEN *string
 		LastNameEN   string
 		PatientHN    string
-		PassportID   string
+		PassportID   *string
 		NationalID   string
 		Gender       string
 		Email        string

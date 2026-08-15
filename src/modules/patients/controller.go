@@ -2,6 +2,7 @@ package patients
 
 import (
 	"database/sql"
+	"fmt"
 
 	apperrors "hospital-middleware-system/src/errors"
 	"hospital-middleware-system/src/helper"
@@ -69,13 +70,9 @@ func (ctrl *Controller) List(c *gin.Context) {
 
 	filters := &dto.PatientFilters{}
 	if err := c.ShouldBindQuery(filters); err != nil {
-		helper.Error(c, apperrors.NewBadRequest("Invalid query parameters"))
-		return
-	}
-	if err := helper.ValidateStruct(filters); err != nil {
-		helper.Error(c, err)
-		return
-	}
+    helper.Error(c, helper.ValidateError(err))
+    return
+  }
 
 	page := filters.Page
 	if page < 1 {
@@ -90,6 +87,7 @@ func (ctrl *Controller) List(c *gin.Context) {
 	}
 
 	list, total, err := ctrl.service.List(c.Request.Context(), hospitalID, filters, page, perPage)
+  fmt.Println("list:", list)
 	if err != nil {
 		helper.Error(c, err)
 		return

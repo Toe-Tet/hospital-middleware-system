@@ -39,13 +39,10 @@ func NewController(db *sql.DB) *Controller {
 func (ctrl *Controller) Create(c *gin.Context) {
 	var req dto.CreateStaffRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		helper.Error(c, helper.ValidateStruct(&req))
-		return
-	}
-	if err := helper.ValidateStruct(&req); err != nil {
-		helper.Error(c, err)
-		return
-	}
+    helper.Error(c, helper.ValidateError(err))
+    return
+  }
+
 	staff, err := ctrl.service.Create(c.Request.Context(), &req)
 	if err != nil {
 		helper.Error(c, err)
@@ -68,13 +65,10 @@ func (ctrl *Controller) Create(c *gin.Context) {
 func (ctrl *Controller) Login(c *gin.Context) {
 	var req dto.LoginRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
-		helper.Error(c, helper.ValidateStruct(&req))
-		return
-	}
-	if err := helper.ValidateStruct(&req); err != nil {
-		helper.Error(c, err)
-		return
-	}
+    helper.Error(c, helper.ValidateError(err))
+    return
+  }
+  
 	resp, err := ctrl.service.Login(c.Request.Context(), &req)
 	if err != nil {
 		helper.Error(c, err)
